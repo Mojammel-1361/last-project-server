@@ -23,6 +23,13 @@ async function run(){
     
     try{
         const dataCategoryCollections = client.db("marketPortal").collection("CategoryCollections");
+        const addCardsCollections = client.db("marketPortal").collection("addCards");
+
+        app.post('/addCards', async(req, res) =>{
+            const addCard = req.body
+            const result = await addCardsCollections.insertOne(addCard);
+            res.send(result);
+        });
 
 
         app.get('/categoryOptions', async (req, res) =>{
