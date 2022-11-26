@@ -31,6 +31,12 @@ async function run(){
             res.send(result);
         });
 
+         app.get("/addCards", async (req, res) => {
+           const query = {};
+           const options = await addCardsCollections.find(query).toArray();
+           res.send(options);
+         });
+
 
         app.get('/categoryOptions', async (req, res) =>{
             const query = {};
@@ -38,21 +44,15 @@ async function run(){
             res.send(options);
         });
 
+
+
+        
         app.get('/categoryOptions/:id', async (req, res) =>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const categoryOption = await dataCategoryCollections.findOne(query);
             res.send(categoryOption); 
-        });
-
-        // app.get('/categoryOptions/:id', async (req, res) =>{
-
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectId(id)};
-        //     const categorys = await dataCategoryCollections.findOne(query);
-        //     res.send(categorys); 
-
-        // });
+        })
     }
 
     finally{
