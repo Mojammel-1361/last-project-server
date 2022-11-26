@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -24,6 +25,20 @@ async function run(){
     try{
         const dataCategoryCollections = client.db("marketPortal").collection("CategoryCollections");
         const addCardsCollections = client.db("marketPortal").collection("addCards");
+        const usersCollections = client.db("marketPortal").collection("users");
+
+        app.get("/users", async (req, res) => {
+          const query = {};
+          const users = await usersCollections.find(query).toArray();
+          res.send(users);
+        });
+
+        app.post('/users', async(req, res) =>{
+            const user = req.body;
+            const result = await usersCollections.insertOne(user);
+            res.send(result);
+        })
+
 
         app.post('/addCards', async(req, res) =>{
             const addCard = req.body
@@ -53,6 +68,20 @@ async function run(){
             const categoryOption = await dataCategoryCollections.findOne(query);
             res.send(categoryOption); 
         })
+
+        app.get("/jwt", async (req, res) => {
+          const email = req.query.email;
+          const query = { email: email };
+          const user = await usersCollections.findOne(query);
+          if (user) {
+            const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, {
+              expiresIn: "2day",
+            });
+            return res.send({ accessToken: token });
+          }
+
+          res.status(403).send({ accessToken: "" });
+        });
     }
 
     finally{
