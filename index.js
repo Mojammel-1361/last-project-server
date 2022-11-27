@@ -39,6 +39,13 @@ async function run(){
             res.send(result);
         })
 
+         app.get('/users/admin/:email', async (req, res) => {
+           const email = req.params.email;
+           const query = { email };
+           const user = await usersCollections.findOne(query);
+           res.send({ isAdmin: user?.role === "Admin" });
+         });
+
 
         app.post('/addCards', async(req, res) =>{
             const addCard = req.body
@@ -47,7 +54,8 @@ async function run(){
         });
 
          app.get("/addCards", async (req, res) => {
-           const query = {};
+           const email = req.query.email;
+           const query = {email: email};
            const options = await addCardsCollections.find(query).toArray();
            res.send(options);
          });
