@@ -26,6 +26,18 @@ async function run(){
         const dataCategoryCollections = client.db("marketPortal").collection("CategoryCollections");
         const addCardsCollections = client.db("marketPortal").collection("addCards");
         const usersCollections = client.db("marketPortal").collection("users");
+        const productsCollections = client.db("marketPortal").collection("products");
+
+        app.post("/products", async (req, res) => {
+          const products = req.body;
+          const result = await productsCollections.insertOne(products);
+          res.send(result);
+        });
+        app. get("/products", async (req, res) => {
+          const query = {};
+          const products = await productsCollections.find(query).toArray();
+          res.send(products);
+        });
 
         app.get("/users", async (req, res) => {
           const query = {};
