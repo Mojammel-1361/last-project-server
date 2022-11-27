@@ -45,6 +45,13 @@ async function run(){
           res.send(users);
         });
 
+        app.delete('/users/:id', async(req, res) =>{
+          const id = req.params.id;
+          const filter = { _id: ObjectId(id) };
+          const result = await usersCollections.deleteOne(filter);
+          res.send(result);
+        });
+
         app.post('/users', async(req, res) =>{
             const user = req.body;
             const result = await usersCollections.insertOne(user);
