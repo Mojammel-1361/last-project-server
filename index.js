@@ -46,6 +46,13 @@ async function run(){
            res.send({ isAdmin: user?.role === "Admin" });
          });
 
+        //  app.get("/users/buyer/:email", async (req, res) => {
+        //    const email = req.params.email;
+        //    const query = { email };
+        //    const user = await usersCollections.findOne(query);
+        //    res.send({ isBuyer: user?.role === "Buyer" });
+        //  });
+
 
         app.post('/addCards', async(req, res) =>{
             const addCard = req.body
